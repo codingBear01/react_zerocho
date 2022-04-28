@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <title>Practice React</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      const e = React.createElement;
+
+      // React에 들어 있는 Component를 상속해 옴
+      class LikeButton extends React.Component {
+        constructor(props) {
+          super(props);
+        }
+
+        render() {
+          // ReactDOM을 통해 <button>Like</button>와 같이 작성
+          return e('button', null, 'Like');
+        }
+      }
+    </script>
+    <script>
+      // 위에 작성한 LikeButton 클래스를 id root div에다 생성
+      ReactDOM.render(e(LikeButton), document.querySelector('#root'));
+    </script>
+  </body>
+</html>
