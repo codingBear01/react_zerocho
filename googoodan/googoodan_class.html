@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>GooGooDan_Class</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      class GooGooDan extends React.Component {
+        /* constructor 없어도 똑같이 동작함.
+        constructor(props) {
+          super(props);
+          this.state = {
+            first: Math.ceil(Math.random() * 9),
+            second: Math.ceil(Math.random() * 9),
+            input: '',
+            point: 0,
+            result: '',
+          };
+        }*/
+
+        state = {
+          first: Math.ceil(Math.random() * 9),
+          second: Math.ceil(Math.random() * 9),
+          input: '',
+          point: 0,
+          result: '',
+        };
+
+        _onSubmit = (e) => {
+          e.preventDefault();
+
+          if (
+            parseInt(this.state.input) ===
+            this.state.first * this.state.second
+          ) {
+            // setState 안에 함수형으로 return하면 이전 상태와 미래 상태 구분 가능. this.state를 반환할 때는 함수형으로 작성.
+            this.setState((prevState) => {
+              return {
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                input: '',
+                point: prevState.point + 1,
+                result: `${prevState.first} * ${prevState.second} = ${prevState.input} 정답!`,
+              };
+            });
+            this._input.focus();
+          } else {
+            this.setState((prevState) => {
+              return {
+                input: '',
+                point: prevState.point - 1,
+                result: '땡!',
+              };
+            });
+            this._input.focus();
+          }
+        };
+
+        _onChange = (e) => {
+          this.setState({ input: e.target.value });
+        };
+
+        _input;
+
+        inputRef = (c) => {
+          this._input = c;
+        };
+
+        render() {
+          return (
+            // 빈 div 태그를 React.Fragement or <></>로 대체 가능.
+            <React.Fragment>
+              <div>
+                {this.state.first} 곱하기 {this.state.second}는?
+              </div>
+
+              <form onSubmit={this._onSubmit}>
+                <input
+                  type="number"
+                  value={this.state.input}
+                  onChange={this._onChange}
+                  ref={this.inputRef}
+                />
+                <button>결과 확인!</button>
+              </form>
+
+              <div>점수: {this.state.point}</div>
+              <div>{this.state.result}</div>
+            </React.Fragment>
+          );
+        }
+      }
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(<GooGooDan />, document.querySelector('#root'));
+    </script>
+  </body>
+</html>

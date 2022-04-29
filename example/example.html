@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- import script for using react -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <!-- import script for using babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>Practice React</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // const e = React.createElement;
+
+      // React에 들어 있는 Component를 상속해 옴
+      class LikeButton extends React.Component {
+        constructor(props) {
+          super(props);
+          // 앞으로 활용할 state 작성
+          this.state = {
+            liked: false,
+          };
+        }
+
+        render() {
+          // 아래와 같이 JS파일에서 html 문법을 쓰는 것을 JSX(JS + XML)라고 함.
+          return (
+            <button
+              onClick={() => {
+                this.setState({ liked: true });
+              }}
+              type="submit"
+            >
+              {this.state.liked ? 'Liked' : 'Unliked'}
+            </button>
+          );
+
+          /* 옛날 문법
+          // functionName(tagName, attributes, values)
+          return e(
+            'button',
+            {
+              onClick: () => {
+                this.setState({ liked: true });
+              },
+              type: 'submit',
+            },
+            this.state.liked ? 'Liked' : 'Unliked'
+          ); */
+        }
+      }
+    </script>
+    <script type="text/babel">
+      // ReactDOM을 통해 위에 작성한 LikeButton 클래스를 id root div에다 생성하여 rendering
+      // ReactDOM.render(e(LikeButton), document.querySelector('#root'));
+      ReactDOM.render(<LikeButton />, document.querySelector('#root'));
+      /* calss를 여러 개 rendering하고 싶다면 div 태그로 감싸주면 됨. 재사용성 up
+      ReactDOM.render(
+        <div>
+          <LikeButton />
+          <LikeButton />
+          <LikeButton />
+          <LikeButton />
+        </div>,
+        document.querySelector('#root')
+        );*/
+    </script>
+  </body>
+</html>
