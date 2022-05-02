@@ -1,58 +1,88 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, { useState, useRef } from 'react';
 import Try from './Try';
 
 const getNumbers = () => {
-  console.log('get random numbers!');
+  const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const array = [];
+  for (let i = 0; i < 4; i++) {
+    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+    array.push(chosen);
+  }
+  return array;
 };
 
-class NumberBaseball extends Component {
-  state = {
-    result: '',
-    input: '',
-    numbers: getNumbers(),
-    tries: 0,
+const NumberBaseball = () => {
+  const [result, setResult] = useState('');
+  const [input, setInput] = useState('');
+  const [numbers, setNumbers] = useState(getNumbers());
+  const [tries, setTries] = useState([]);
+  const inputRef = useRef(null);
+
+  const _onSubmit = (e) => {
+    e.preventDefault();
+
+    if (input === numbers.join('')) {
+      setResult('홈런');
+      setTries((prevTries) => {
+        return [...prevTries, { try: input, result: '홈런' }];
+      });
+      setInput('');
+      setNumbers(getNumbers());
+      setTries(['']);
+    } else {
+      const answerArray = input.split('').map((v) => parseInt(v));
+      let strike = 0;
+      let ball = 0;
+
+      if (tries.length >= 9) {
+        setResult(
+          `10번 넘게 틀렸으므로 실패! 답은 ${numbers.join(',')}였다능!ㅇㅅㅇ`
+        );
+        setInput('');
+        setNumbers(getNumbers());
+        setTries([]);
+      } else {
+        for (let i = 0; i < 4; i++) {
+          if (answerArray[i] === numbers[i]) {
+            strike += 1;
+          } else if (numbers.includes(answerArray[i])) {
+            ball += 1;
+          }
+        }
+        setTries((prevTries) => {
+          return [
+            ...prevTries,
+            { try: input, result: `${strike} 스크라이크, ${ball} 볼입니다` },
+          ];
+        });
+        setInput('');
+      }
+    }
   };
 
-  _onSubmit = (e) => e.preventDefault();
+  const _onChange = (e) => setInput(e.target.value);
 
-  _onChange = (e) => setInput(e.target.value);
-
-  _input;
-
-  inpiutRef = (c) => (this._input = c);
-
-  fruits = [
-    { fruit: '사과', taste: '맛나다' },
-    { fruit: '배', taste: '달다' },
-    { fruit: '대추', taste: '노맛' },
-    { fruit: '밤', taste: '꼬소하다' },
-    { fruit: '귤', taste: '쌔그럽다' },
-  ];
-
-  render() {
-    return (
-      <>
-        <h1>{this.state.result}</h1>
-        <form onSubmit={this._onSubmit}>
-          <input
-            type="number"
-            value={this.state.input}
-            onChange={this._onChange}
-            maxLength={4}
-            ref={this.inputRef}
-          />
-          <button>확인</button>
-        </form>
-        <div>시도 횟수: {this.state.tries}</div>
-        <ul>
-          {this.fruits.map((v, i) => (
-            <Try value={v} index={i} />
-          ))}
-        </ul>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <h1>{result}</h1>
+      <form onSubmit={_onSubmit}>
+        <input
+          type="number"
+          value={input}
+          onChange={_onChange}
+          maxLength={4}
+          ref={inputRef}
+        />
+        <button>확인</button>
+      </form>
+      <div>시도 횟수: {tries.length}</div>
+      <ul>
+        {tries.map((v, i) => {
+          return <Try key={`${i + 1}차 시도: `} tryInfo={v} />;
+        })}
+      </ul>
+    </>
+  );
+};
 
 export default NumberBaseball;

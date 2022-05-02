@@ -5,4 +5,8 @@ import NumberBaseball from './NumberBaseball';
 const container = document.querySelector('#root');
 const root = ReactDOM.createRoot(container);
 
-root.render(<NumberBaseball />);
+root.render(
+  <React.StrictMode>
+    <NumberBaseball />
+  </React.StrictMode>
+);

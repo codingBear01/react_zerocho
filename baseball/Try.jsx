@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
-
-class Try extends Component {
-  render() {
-    return (
-      <li key={this.props.value.fruit + this.props.value.taste}>
-        <div>번호: {this.props.index + 1}</div>
-        <div>과일 이름: {this.props.value.fruit}</div>
-        <div>맛: {this.props.value.taste}</div>
-        <div>ㅎㅅaㅎ1</div>
-        <div>ㅇㅅaㅇ2</div>
-      </li>
-    );
-  }
-}
+import React from 'react';
+// const Try = ((props)) => {}
+const Try = ({ tryInfo }) => {
+  return (
+    <li>
+      {/* <div>{props.ryInfo.try}</div> */}
+      {/* <div>{props.tryInfo.result}</div> */}
+      <div>{tryInfo.try}</div>
+      <div>{tryInfo.result}</div>
+    </li>
+  );
+};
 
 export default Try;
