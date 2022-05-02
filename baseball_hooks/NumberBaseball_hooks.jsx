@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import Try from './Try';
 
 const getNumbers = () => {
@@ -11,7 +11,7 @@ const getNumbers = () => {
   return array;
 };
 
-const NumberBaseball = () => {
+const NumberBaseball = memo(() => {
   const [result, setResult] = useState('');
   const [input, setInput] = useState('');
   const [numbers, setNumbers] = useState(getNumbers());
@@ -29,6 +29,7 @@ const NumberBaseball = () => {
       setInput('');
       setNumbers(getNumbers());
       setTries(['']);
+      inputRef.current.focus();
     } else {
       const answerArray = input.split('').map((v) => parseInt(v));
       let strike = 0;
@@ -56,6 +57,7 @@ const NumberBaseball = () => {
           ];
         });
         setInput('');
+        inputRef.current.focus();
       }
     }
   };
@@ -83,6 +85,6 @@ const NumberBaseball = () => {
       </ul>
     </>
   );
-};
+});
 
 export default NumberBaseball;
