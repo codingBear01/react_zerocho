@@ -14,7 +14,7 @@ const getNumbers = () => {
 class NumberBaseball extends PureComponent {
   state = {
     result: '',
-    input: 0,
+    input: '',
     numbers: getNumbers(),
     tries: [],
   };

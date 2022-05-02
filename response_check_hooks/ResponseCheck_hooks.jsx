@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import RenderAvgTime from './RenderAvgTime';
 
 const ResponseCheck = () => {
   const [status, setStatus] = useState('waiting');
@@ -34,19 +35,6 @@ const ResponseCheck = () => {
     }
   };
 
-  const renderAvgTime = () => {
-    return avgTime.length === 0 ? null : (
-      <>
-        <div>
-          평균 시간:{' '}
-          {Math.floor(avgTime.reduce((a, c) => a + c) / avgTime.length)}
-          ms
-        </div>
-        <button onClick={onReset}>Reset</button>
-      </>
-    );
-  };
-
   const onReset = () => setAvgTime([]);
 
   return (
@@ -54,7 +42,7 @@ const ResponseCheck = () => {
       <div id="screen" className={status} onClick={onClickScreen}>
         {message}
       </div>
-      {renderAvgTime()}
+      <RenderAvgTime avgTime={avgTime} reset={onReset} />
     </>
   );
 };

@@ -14,7 +14,7 @@ const Test = () => {
   return (
     <>
       <button onClick={_onClick}>TEST PAGE</button>
-      <RenderArr props={[arr, reset]} />
+      <RenderArr arr={arr} reset={reset} />
     </>
   );
 };

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
 const RenderArr = (props) => {
-  console.log(props.props[0]);
-  return props.props[0].length === 0 ? null : (
+  return props.arr.length === 0 ? null : (
     <>
-      <div>{props.props[0]}</div>
-      <button onClick={props.props[1]}>button</button>
+      <div>{props.arr}</div>
+      <button onClick={props.reset}>button</button>
     </>
   );
 };
