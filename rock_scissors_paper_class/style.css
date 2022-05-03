@@ -1,0 +1,10 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#computer {
+  width: 142px;
+  height: 200px;
+  background-position: 0 0;
+}
