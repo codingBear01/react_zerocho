@@ -4,7 +4,7 @@ const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  name: 'rock-scissors-paper-setting',
+  name: 'tic-tac-toe-setting',
   mode: isDevelopment ? 'development' : 'production',
   devtool: 'eval',
   resolve: {
