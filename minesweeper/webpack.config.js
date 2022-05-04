@@ -4,7 +4,7 @@ const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  name: 'tic-tac-toe-setting',
+  name: 'minesweeper-setting',
   mode: isDevelopment ? 'development' : 'production',
   devtool: 'eval',
   resolve: {
