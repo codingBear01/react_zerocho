@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, useMemo } from 'react';
+import React, { useReducer, useEffect, createContext, useMemo } from 'react';
 import Table from './Table';
 import Setting from './Setting';
 
@@ -31,6 +31,7 @@ const initialState = {
   timer: 0,
   result: '',
   halted: true,
+  openedCnt: 0,
 };
 
 const createMines = (row, cell, mine) => {
@@ -77,6 +78,7 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 // action 발생 시 reducer에서 state 처리
 const reducer = (state, action) => {
@@ -85,16 +87,26 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: createMines(action.row, action.cell, action.mine),
+        data: {
+          row: action.row,
+          cell: action.cell,
+          mine: action.mine,
+        },
+        timer: 0,
+        result: '',
         halted: false,
+        openedCnt: 0,
       };
 
-    case OPEN_CELL:
+    case OPEN_CELL: {
       const tableData = [...state.tableData];
       tableData.forEach((row, i) => {
         tableData[i] = [...row];
       });
 
       const checked = [];
+      let openedCnt = 0;
+
       const checkAround = (row, cell) => {
         // 상하좌우 칸이 없을 경우 제외
         if (
@@ -116,7 +128,6 @@ const reducer = (state, action) => {
           ].includes(tableData[row][cell])
         )
           return;
-
         // 이미 탐색한 칸은 pass. call stack over 방지
         if (checked.includes(row + '/' + cell)) {
           return;
@@ -125,21 +136,21 @@ const reducer = (state, action) => {
         }
 
         // 클릭한 칸에 주위 8칸 내 존재하는 지뢰 개수 표시
-        let around = [tableData[row][cell - 1], tableData[row], [cell + 1]];
+        let around = [tableData[row][cell - 1], tableData[row][cell + 1]];
 
         if (tableData[row - 1]) {
-          around = around.concat(
+          around = around.concat([
             tableData[row - 1][cell - 1],
             tableData[row - 1][cell],
-            tableData[row - 1][cell + 1]
-          );
+            tableData[row - 1][cell + 1],
+          ]);
         }
         if (tableData[row + 1]) {
-          around = around.concat(
+          around = around.concat([
             tableData[row + 1][cell - 1],
             tableData[row + 1][cell],
-            tableData[row + 1][cell + 1]
-          );
+            tableData[row + 1][cell + 1],
+          ]);
         }
 
         const count = around.filter((v) =>
@@ -170,14 +181,30 @@ const reducer = (state, action) => {
             });
           }
         }
+        if (tableData[row][cell] === CODE.NORMAL) openedCnt += 1;
         tableData[row][cell] = count;
       };
       checkAround(action.row, action.cell);
+      console.log(state.openedCnt + openedCnt);
+      // 승리 조건 설정
+      let halted = false;
+      let result = '';
+      if (
+        state.data.row * state.data.cell - state.data.mine ===
+        state.openedCnt + openedCnt
+      ) {
+        halted = true;
+        result = `YOU WON! It takes to only ${state.timer}sec to win!`;
+      }
 
       return {
         ...state,
         tableData,
+        openedCnt: state.openedCnt + openedCnt,
+        halted,
+        result,
       };
+    }
 
     case CLICK_MINE: {
       const tableData = [...state.tableData];
@@ -188,6 +215,7 @@ const reducer = (state, action) => {
         ...state,
         tableData,
         halted: true,
+        result: 'YOU LOST!',
       };
     }
 
@@ -236,6 +264,13 @@ const reducer = (state, action) => {
       };
     }
 
+    case INCREMENT_TIMER: {
+      return {
+        ...state,
+        timer: state.timer + 1,
+      };
+    }
+
     default:
       return state;
   }
@@ -250,11 +285,19 @@ const Minesweeper = () => {
     [tableData, halted]
   );
 
+  useEffect(() => {
+    let timer;
+    if (halted === false) {
+      timer = setInterval(() => dispatch({ type: INCREMENT_TIMER }), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [halted]);
+
   return (
     // context API에서 접근할 data를 TableContext.Provider로 묶어줘야 함
     <TableContext.Provider value={value}>
       <Setting />
-      <div>{timer}</div>
+      <div>{timer}초 경과</div>
       <Table />
       <div>{result}</div>
     </TableContext.Provider>

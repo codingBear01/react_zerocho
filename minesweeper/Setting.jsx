@@ -2,7 +2,7 @@ import React, { useState, useCallback, useContext, memo } from 'react';
 import { TableContext } from './Minesweeper';
 import { START_GAME } from './Minesweeper';
 
-const Setting = () => {
+const Setting = memo(() => {
   const [row, setRow] = useState(10);
   const [cell, setCell] = useState(10);
   const [mine, setMine] = useState(20);
@@ -51,6 +51,6 @@ const Setting = () => {
       <button onClick={onClickBtn}>START</button>
     </div>
   );
-};
+});
 
 export default Setting;
