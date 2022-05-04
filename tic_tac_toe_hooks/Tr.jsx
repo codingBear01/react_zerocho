@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import Td from './Td';
 
-const Tr = ({ rowData, rowIdx, dispatch }) => {
+const Tr = memo(({ rowData, rowIdx, dispatch }) => {
+  /* const ref = useRef([]);
+  useEffect(() => {
+    console.log(
+      rowData === ref.current[0],
+      rowIdx === ref.current[1],
+      dispatch === ref.current[2]
+    );
+    ref.current = [rowData, rowIdx, dispatch];
+  }, [rowData, rowIdx, dispatch]); */
+
   return (
     <tr>
       {Array(rowData.length)
@@ -19,6 +29,6 @@ const Tr = ({ rowData, rowIdx, dispatch }) => {
         ))}
     </tr>
   );
-};
+});
 
 export default Tr;
