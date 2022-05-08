@@ -194,7 +194,7 @@ const reducer = (state, action) => {
         state.openedCnt + openedCnt
       ) {
         halted = true;
-        result = `YOU WON! It takes to only ${state.timer}sec to win!`;
+        result = `YOU WON! It takes only ${state.timer}sec to win!`;
       }
 
       return {

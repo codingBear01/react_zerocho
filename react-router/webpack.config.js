@@ -4,7 +4,7 @@ const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  name: 'test-setting',
+  name: 'games-setting',
   mode: isDevelopment ? 'development' : 'production',
   devtool: 'eval',
   resolve: {
@@ -51,6 +51,5 @@ module.exports = {
     devMiddleware: { publicPath: '/dist/' },
     static: { directory: path.resolve(__dirname) },
     hot: true,
-    historyApiFallback: true,
   },
 };
